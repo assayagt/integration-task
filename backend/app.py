@@ -9,7 +9,8 @@ CORS(app)
 def login():
     data = request.json
     try:
-        jira = JIRA(options={'server': 'https://tassayag.atlassian.net'},basic_auth=(data['email'], data['api_token']))
+        jira = JIRA(options={'server': 'https://tassayag.atlassian.net'}, basic_auth=(data['email'], data['api_token']))
+        user = jira.myself()
         return {"status": "success"}, 200
     except Exception as e:
         return {"status": "error", "message": str(e)}, 400
