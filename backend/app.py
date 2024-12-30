@@ -1,4 +1,4 @@
-from flask import Flask, request, session
+from flask import Flask, request, jsonify
 from jira import JIRA
 from flask_cors import CORS
 from requests import HTTPError
@@ -10,8 +10,11 @@ CORS(app)
 def login():
     data = request.json
     try:
+        server = data.get('server')
+        if not server:
+            return {"status": "error", "message": "Server domain is required"}, 400
         
-        jira = JIRA(options={'server': 'https://tassayag.atlassian.net'},
+        jira = JIRA(options={'server': server},
                     basic_auth=(data['email'], data['api_token']))
         
         user = jira.myself()
@@ -20,17 +23,17 @@ def login():
     except Exception as e:
         return {"status": "error", "message": str(e)}, 400
 
-
 @app.route('/api/create', methods=['POST'])
 def create_ticket():
     data = request.json
-
-    print(data)
     try:
-        jira = JIRA(options={'server': 'https://tassayag.atlassian.net'},
+        server = data.get('server')
+        if not server:
+            return {"status": "error", "message": "Server domain is required"}, 400
+
+        jira = JIRA(options={'server': server},
                     basic_auth=(data['email'], data['api_token']))
         
-
         issue_dict = {
             'project': {'id': data['project_id']},
             'summary': data['title'],
@@ -41,12 +44,11 @@ def create_ticket():
 
         new_issue = jira.create_issue(fields=issue_dict)
 
-        ticket_url = f'https://tassayag.atlassian.net/browse/{new_issue.key}'
+        ticket_url = f'{server}/browse/{new_issue.key}'
         return {"status": "success", "ticketUrl": ticket_url}, 200
 
     except HTTPError as e:
-        print(e.response.text)
-
+        return {"status": "error", "message": str(e)}, 400
 
 if __name__ == '__main__':
     app.run(debug=True)
