@@ -6,13 +6,13 @@ const TicketSubmission = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [occurrences, setOccurrences] = useState('');
-
   const [ticketUrl, setTicketUrl] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async () => {
     // Validate form inputs
     if (!projectId || !title || !description || !occurrences) {
-      alert('Please fill in all fields');
+      setError('Please fill in all fields');
       return;
     }
 
@@ -22,7 +22,7 @@ const TicketSubmission = () => {
 
     // Check if credentials are available
     if (!email || !api_token) {
-      alert('You must log in first.');
+      setError('You must log in first.');
       return;
     }
 
@@ -36,63 +36,79 @@ const TicketSubmission = () => {
         email: email,          // Send email
         api_token: api_token,  // Send api_token
       });
-      
+
       // Set the ticket URL after a successful response
       setTicketUrl(response.data.ticketUrl);
+      setError(''); // Clear any previous error message
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while creating the ticket.');
+      setError('An error occurred while creating the ticket.');
     }
   };
 
   return (
-    <div>
-      <h2>Create Jira Ticket</h2>
-      <div>
-        <label htmlFor="projectId">Project ID:</label>
-        <input
-          type="text"
-          id="projectId"
-          value={projectId}
-          onChange={(e) => setProjectId(e.target.value)}
-          required
-        />
+    <div className="container py-5">
+      <h2 className="mb-4 text-center">Create Jira Ticket</h2>
+
+      {error && <div className="alert alert-danger">{error}</div>}
+
+      <div className="card shadow-lg">
+        <div className="card-body">
+          <div className="mb-3">
+            <label htmlFor="projectId" className="form-label">Project ID:</label>
+            <input
+              type="text"
+              id="projectId"
+              className="form-control"
+              value={projectId}
+              onChange={(e) => setProjectId(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="title" className="form-label">Title:</label>
+            <input
+              type="text"
+              id="title"
+              className="form-control"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="description" className="form-label">Description:</label>
+            <textarea
+              id="description"
+              className="form-control"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="occurrences" className="form-label">Occurrences:</label>
+            <input
+              type="number"
+              id="occurrences"
+              className="form-control"
+              value={occurrences}
+              onChange={(e) => setOccurrences(e.target.value)}
+              required
+            />
+          </div>
+
+          <button className="btn btn-primary w-100" onClick={handleSubmit}>Create Ticket</button>
+        </div>
       </div>
-      <div>
-        <label htmlFor="title">Title:</label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="description">Description:</label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="occurrences">Occurrences:</label>
-        <input
-          type="number"
-          id="occurrences"
-          value={occurrences}
-          onChange={(e) => setOccurrences(e.target.value)}
-          required
-        />
-      </div>
-      <button type="button" onClick={handleSubmit}>Create Ticket</button>
 
       {ticketUrl && (
-        <div>
+        <div className="mt-4 alert alert-success">
           <p>Ticket created successfully! You can view it here:</p>
-          <a href={ticketUrl} target="_blank" rel="noopener noreferrer">
+          <a href={ticketUrl} target="_blank" rel="noopener noreferrer" className="alert-link">
             {ticketUrl}
           </a>
         </div>
