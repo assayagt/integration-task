@@ -17,6 +17,7 @@ const TicketSubmission = () => {
 
     const email = sessionStorage.getItem('email');
     const api_token = sessionStorage.getItem('api_token');
+    const server = sessionStorage.getItem('server')
 
     if (!email || !api_token) {
       setError('You must log in first.');
@@ -30,7 +31,8 @@ const TicketSubmission = () => {
         description: description,
         occurrences: occurrences,
         email: email,          
-        api_token: api_token,  
+        api_token: api_token,
+        server: server,
       });
 
       setTicketUrl(response.data.ticketUrl);
