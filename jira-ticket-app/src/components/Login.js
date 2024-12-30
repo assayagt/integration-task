@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [api_token, setApiToken] = useState('');
+    const navigate = useNavigate(); // Hook to programmatically navigate
 
     const handleLogin = async () => {
         try {
             const response = await axios.post('http://localhost:5000/api/login', { email, api_token });
-            alert(response.data.status === 'success' ? 'Logged in!' : 'Login failed');
+            if (response.data.status === 'success') {
+                alert('Logged in!');
+                navigate('/ticket-submission'); // Navigate to TicketSubmission page on success
+            } else {
+                alert('Login failed');
+            }
         } catch (error) {
             alert('Login failed');
         }
