@@ -10,34 +10,29 @@ const TicketSubmission = () => {
   const [error, setError] = useState('');
 
   const handleSubmit = async () => {
-    // Validate form inputs
     if (!projectId || !title || !description || !occurrences) {
       setError('Please fill in all fields');
       return;
     }
 
-    // Retrieve credentials from sessionStorage
     const email = sessionStorage.getItem('email');
     const api_token = sessionStorage.getItem('api_token');
 
-    // Check if credentials are available
     if (!email || !api_token) {
       setError('You must log in first.');
       return;
     }
 
     try {
-      // Send data to backend to create Jira ticket, including credentials from sessionStorage
       const response = await axios.post('http://localhost:5000/api/create', {
         project_id: projectId,
         title: title,
         description: description,
         occurrences: occurrences,
-        email: email,          // Send email
-        api_token: api_token,  // Send api_token
+        email: email,          
+        api_token: api_token,  
       });
 
-      // Set the ticket URL after a successful response
       setTicketUrl(response.data.ticketUrl);
       setError(''); // Clear any previous error message
     } catch (error) {

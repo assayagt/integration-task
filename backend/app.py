@@ -11,11 +11,9 @@ def login():
     data = request.json
     try:
         
-        # Initialize the JIRA object
         jira = JIRA(options={'server': 'https://tassayag.atlassian.net'},
                     basic_auth=(data['email'], data['api_token']))
         
-        # Test the connection
         user = jira.myself()
         
         return {"status": "success", "message": f"Logged in as {user['displayName']}"}, 200
