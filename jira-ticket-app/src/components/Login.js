@@ -11,6 +11,8 @@ function Login() {
         try {
             const response = await axios.post('http://localhost:5000/api/login', { email, api_token });
             if (response.data.status === 'success') {
+                sessionStorage.setItem('email', email);
+                sessionStorage.setItem('api_token', api_token);
                 alert('Logged in!');
                 navigate('/ticket-submission'); // Navigate to TicketSubmission page on success
             } else {
