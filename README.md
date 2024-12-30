@@ -24,7 +24,7 @@ npm start
 
 ## Usage
 1.	Open the frontend in your browser (http://localhost:3000).
-2.	Enter your Jira credentials (email and API token) in the login form.
+2.	Enter your Jira credentials (jira sever domain, email and API token) in the login form.
 3.	After successful login, the UI will prompt you to input:
    a.	Project ID (The project id of the new project you created)
    b.	Title
@@ -35,7 +35,8 @@ npm start
 
 ## Screenshots
 1.	Login Screen:
-<img width="147" alt="image" src="https://github.com/user-attachments/assets/cfa69039-e077-47fa-bde5-171011597a0a" />
+<img width="147" alt="image" src="https://github.com/user-attachments/assets/b7608c45-6a69-4419-8f4c-2334be0547d7" />
+
 
 2.	Ticket Creation Form:
 <img width="600" alt="image" src="https://github.com/user-attachments/assets/2b0a31a6-3295-4f4f-9379-2fa68236db65" />
